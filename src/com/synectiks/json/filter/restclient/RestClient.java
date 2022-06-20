@@ -41,16 +41,19 @@ public class RestClient {
 		  }catch (IOException e) {
 			  e.printStackTrace();
 		  }finally {
-			  conn.disconnect();
+			 if(conn != null) {
+				conn.disconnect();
+			 }
 		  }
 	}
 
 	public static void testUpdateApi() {
 		String API_END_POINT = BASE_URL + "/catalogue";
+		HttpURLConnection conn = null;
 		  try {
 
 			URL url = new URL(API_END_POINT);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("PUT");
 			conn.setRequestProperty("Content-Type", "application/json");
@@ -75,7 +78,7 @@ public class RestClient {
 				System.out.println(output);
 			}
 
-			conn.disconnect();
+			
 
 		  } catch (MalformedURLException e) {
 
@@ -85,11 +88,16 @@ public class RestClient {
 
 			e.printStackTrace();
 
+		 }finally {
+			 if(conn != null) {
+				 conn.disconnect();
+			 }
+			  
 		 }
 
 		}
 	
 	public static void main(String a[]) {
-		testUpdateApi();
+		testGetApi();
 	}
 }
