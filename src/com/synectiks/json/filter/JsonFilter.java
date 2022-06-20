@@ -12,9 +12,9 @@ import com.synectiks.json.filter.db.DbOperation;
 
 public class JsonFilter {
 
-	static String filePath = "D:\\mycode\\json-data\\Catalogue\\dummy_catalogue.json";
+	static String filePath = "D:\\mycode\\json-data\\Catalogue\\catalogue.json";
 	
-	private static String loadJson(String filePath) {
+	public static String loadJson(String filePath) {
 		return JsonFileLoader.load(filePath);
 	}
 	
