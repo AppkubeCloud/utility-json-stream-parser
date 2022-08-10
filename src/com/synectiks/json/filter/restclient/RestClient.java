@@ -48,6 +48,7 @@ public class RestClient {
 	}
 
 	public static void testUpdateApi() {
+		System.out.println("calling Update API");
 		String API_END_POINT = BASE_URL + "/catalogue";
 		HttpURLConnection conn = null;
 		  try {
@@ -55,14 +56,20 @@ public class RestClient {
 			URL url = new URL(API_END_POINT);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
-			conn.setRequestMethod("PUT");
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Accept", "application/json");
 			conn.setRequestProperty("Content-Type", "application/json");
 
 			String input = JsonFilter.loadJson("D:\\mycode\\json-data\\Catalogue\\catalogue.json");
-
-			OutputStream os = conn.getOutputStream();
-			os.write(input.getBytes());
-			os.flush();
+			try(OutputStream os = conn.getOutputStream()) {
+				byte[] byteInput = input.getBytes("utf-8");
+				os.write(byteInput, 0, byteInput.length);	
+				os.flush();		
+			}
+			catch(Exception e)
+			{
+				System.out.println(e.getMessage());
+			}
 
 			if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED && conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
 				throw new RuntimeException("Failed : HTTP error code : "
@@ -98,6 +105,7 @@ public class RestClient {
 		}
 	
 	public static void main(String a[]) {
-		testGetApi();
+		//testGetApi();
+		testUpdateApi();
 	}
 }
