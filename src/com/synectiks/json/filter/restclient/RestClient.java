@@ -215,6 +215,54 @@ public class RestClient {
 
 	}
 	
+	public static void addServiceDetail() {
+		String API_END_POINT = BASE_URL + "/service-detail";
+		HttpURLConnection conn = null;
+		  try {
+
+			URL url = new URL(API_END_POINT);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Accept", "application/json");
+			conn.setRequestProperty("Content-Type", "application/json");
+			
+			String input = JsonFilter.loadJson("C:\\mycode\\json-data\\single-service.json");
+			try(OutputStream os = conn.getOutputStream()) {
+				byte[] byteInput = input.getBytes("utf-8");
+				os.write(byteInput, 0, byteInput.length);	
+				os.flush();		
+			}
+			catch(Exception e)
+			{
+				System.out.println(e.getMessage());
+			}
+
+			if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED && conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+				throw new RuntimeException("Failed : HTTP error code : "
+					+ conn.getResponseCode());
+			}
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream())));
+
+			String output;
+			System.out.println("Output from Server .... \n");
+			while ((output = br.readLine()) != null) {
+				System.out.println(output);
+			}
+		  } catch (MalformedURLException e) {
+			e.printStackTrace();
+		  } catch (IOException e) {
+			e.printStackTrace();
+		 }finally {
+			 if(conn != null) {
+				 conn.disconnect();
+			 }
+		 }
+
+	}
+	
 	public static void main(String a[]) {
 		//testGetApi();
 //		testUpdateApi();
