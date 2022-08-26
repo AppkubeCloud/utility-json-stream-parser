@@ -311,10 +311,87 @@ public class RestClient {
 
 	}
 	
+	public static void getServiceDetailApi() {
+		String API_END_POINT = BASE_URL + "/service-detail";
+		HttpURLConnection conn = null;
+	  	try {
+			  	URL url = new URL(API_END_POINT);
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Accept", "application/json");
+					
+				if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED && conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+					throw new RuntimeException("Failed : HTTP error code : "
+						+ conn.getResponseCode());
+				}
+				BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+			
+				String output;
+				System.out.println("Output from Server .... \n");
+				while ((output = br.readLine()) != null) {
+					System.out.println(output);
+				}
+		  }catch (MalformedURLException e) {
+			  e.printStackTrace();
+		  }catch (IOException e) {
+			  e.printStackTrace();
+		  }finally {
+			 if(conn != null) {
+				conn.disconnect();
+			 }
+		  }
+	}	
+	
+	
+	public static void updateServiceDetailsInLoop() {
+		String API_END_POINT = BASE_URL + "/service-detail/test-sla-json";
+		HttpURLConnection conn = null;
+	  	while(true) {
+	  		long beginTime = System.currentTimeMillis();
+	  		try {
+			  	URL url = new URL(API_END_POINT);
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Accept", "application/json");
+					
+				if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED && conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+					throw new RuntimeException("Failed : HTTP error code : "
+						+ conn.getResponseCode());
+				}
+				BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+			
+				String output;
+				System.out.println("Output from Server .... \n");
+				while ((output = br.readLine()) != null) {
+					System.out.println(output);
+				}
+		  }catch (MalformedURLException e) {
+			  e.printStackTrace();
+		  }catch (IOException e) {
+			  e.printStackTrace();
+		  }finally {
+			 if(conn != null) {
+				conn.disconnect();
+			 }
+		  }
+	  		long endTime = System.currentTimeMillis();
+	  		long difference = endTime - beginTime;
+	  		System.out.println("Time taken in minutes : "+(difference) / 1000 / 60);
+	  		try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	  	}
+		
+	}
+	
 	public static void main(String a[]) {
 		//testGetApi();
 //		testUpdateApi();
 //		addServiceDetail();
-		updateSlaJson();
+//		updateSlaJson();
+		updateServiceDetailsInLoop();
 	}
 }
